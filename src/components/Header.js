@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import styled from 'styled-components';
 import i18n from '../translations/i18n';
@@ -16,7 +15,7 @@ function Header({lang, changeLang}) {
       </Logo>
       <RightSection>
         <SignOut>
-          {lang}
+          {lang}<i className="fa fa-chevron-down"></i>
           <DropDown>
             <span onClick={() => changeLang('en')}>EN</span>
             <span onClick={() => changeLang('fr')}>FR</span>
