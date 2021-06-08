@@ -114,7 +114,9 @@ const Login = (props) => {
                 value={password}
               />
               <FormButton type='submit'>{t('login')}</FormButton>
-              <OAuthButton onClick={handleAuth}>{t('login_google')}</OAuthButton>
+              <OAuthButton onClick={handleAuth}>
+                {t('login_google')}
+              </OAuthButton>
               <OAuthButton>{t('login_42')}</OAuthButton>
             </LoginForm>
           ) : (
@@ -155,7 +157,9 @@ const Login = (props) => {
                 value={password}
               />
               <FormButton>{t('signup')}</FormButton>
-              <OAuthButton onClick={handleAuth}>{t('signup_google')}</OAuthButton>
+              <OAuthButton onClick={handleAuth}>
+                {t('signup_google')}
+              </OAuthButton>
               <OAuthButton>{t('signup_42')}</OAuthButton>
             </SignUpForm>
           )}
@@ -201,55 +205,6 @@ const Content = styled.div`
   height: 100%;
 `;
 
-const CTA = styled.div`
-  max-width: 650px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const CTALogoOne = styled.img`
-  margin-bottom: 12px;
-  max-width: 600px;
-  min-height: 1px;
-  display: block;
-  width: 100%;
-`;
-
-const SignUp = styled.a`
-  font-weight: bold;
-  color: #f9f9f9;
-  background-color: #0063e5;
-  margin-bottom: 12px;
-  width: 100%;
-  letter-spacing: 1.5px;
-  font-size: 18px;
-  padding: 16.5px 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #0483ee;
-    cursor: pointer;
-  }
-`;
-
-const Description = styled.p`
-  color: hsla(0, 0%, 95.3%, 1);
-  font-size: 11px;
-  margin: 0 0 24px;
-  line-height: 1.5;
-  letter-spacing: 1.5px;
-`;
-
-const CTALogoTwo = styled.img`
-  max-width: 600px;
-  margin-bottom: 20px;
-  display: inline-block;
-  vertical-align: bottom;
-  width: 100%;
-`;
-
 const FormContainer = styled.div`
   width: 90%;
   max-width: 500px;
@@ -281,7 +236,7 @@ const Input = styled.input`
   border: none;
   border-bottom: 0.5px solid #635e5e55;
   margin-top: 40px;
-  margin-botton: 10px;
+  margin-bottom: 10px;
   width: 100%;
   color: white;
   ::-webkit-input-placeholder {
@@ -301,6 +256,11 @@ const FormButton = styled.button`
   color: white;
   border: none;
   font-weight: bold;
+  border-radius: 2px;
+  &:hover {
+    background-color: #3c5faa;
+    cursor: pointer;
+  }
 `;
 
 const OAuthButton = styled.button`
@@ -311,5 +271,10 @@ const OAuthButton = styled.button`
   color: white;
   border: none;
   font-weight: bold;
+  border-radius: 2px;
+  &:hover {
+    background-color: #3c5faa;
+    cursor: pointer;
+  }
 `;
 export default Login;
