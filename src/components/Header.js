@@ -1,21 +1,38 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import styled from 'styled-components';
+import i18n from '../translations/i18n';
+import '../translations/i18n';
 
-function Header() {
-
-    const handleAuth = () => {
-        console.log('handle auth')
-    }
-
+function Header({lang, changeLang}) {
+  const handleAuth = () => {
+    console.log('handle auth');
+  };
+  
   return (
     <Nav>
       <Logo>
         <img src='/images/logo.svg' alt='Disney+' />
       </Logo>
-      <Login onClick={handleAuth}>Login / Signup</Login>
+      <RightSection>
+        <SignOut>
+          {lang}
+          <DropDown>
+            <span onClick={() => changeLang('en')}>EN</span>
+            <span onClick={() => changeLang('fr')}>FR</span>
+          </DropDown>
+        </SignOut>
+        <Login onClick={handleAuth}>Login / Signup</Login>
+        </RightSection>
     </Nav>
   );
 }
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+
+`;
 
 const Nav = styled.nav`
   position: fixed;
@@ -61,6 +78,47 @@ const Login = styled.a`
     background-color: #f9f9f9;
     color: #000;
     border-color: transparent;
+  }
+`;
+
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0px;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 60px;
+  opacity: 0;
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  span {
+    margin: 2px;
+  }
+`;
+
+const SignOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 18px;
+
+  &:hover {
+    ${DropDown} {
+      opacity: 1;
+      transition-duration: 1s;
+    }
   }
 `;
 

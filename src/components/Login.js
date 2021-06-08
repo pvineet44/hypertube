@@ -1,15 +1,18 @@
-import { useState } from "react";
-import styled from "styled-components";
-import { auth, provider } from "../firebase";
+import { useState } from 'react';
+import styled from 'styled-components';
+import { auth, provider } from '../firebase';
+import { useTranslation } from 'react-i18next';
+import '../translations/i18n';
 
 const Login = (props) => {
   const [loginStatus, setLoginStatus] = useState(0);
   const [showLoginForm, setShowLoginForm] = useState(true);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { t } = useTranslation();
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -18,7 +21,7 @@ const Login = (props) => {
         .signInWithPopup(provider)
         .then((result) => {
           // setUser(result.user);
-          console.log("USER", result.user);
+          console.log('USER', result.user);
           setLoginStatus(1);
         })
         .catch((error) => {
@@ -30,7 +33,7 @@ const Login = (props) => {
         .then(() => {
           // dispatch(setSignOutState());
           // history.push("/");
-          console.log("LO");
+          console.log('LO');
           setLoginStatus(0);
         })
         .catch((err) => alert(err.message));
@@ -39,11 +42,11 @@ const Login = (props) => {
 
   const handleEmailPassAuth = (e) => {
     e.preventDefault();
-    console.log("Login", email, password);
+    console.log('Login', email, password);
     auth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log("EMAIL/PASS", auth);
+        console.log('EMAIL/PASS', auth);
         setLoginStatus(1);
 
         // if (auth) {
@@ -55,12 +58,12 @@ const Login = (props) => {
 
   const handleEmailPassSignUp = (e) => {
     e.preventDefault();
-    console.log("Signup", email, password, firstName, lastName, userName);
+    console.log('Signup', email, password, firstName, lastName, userName);
 
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log("SignUp", auth);
+        console.log('SignUp', auth);
         // if (auth) {
         //   history.push("/");
         // }
@@ -72,11 +75,11 @@ const Login = (props) => {
     <Container>
       <Content>
         {loginStatus ? (
-          <div onClick={handleAuth}>Logout</div>
+          <div onClick={handleAuth}>{t('logout')}</div>
         ) : (
           <div>
             {/* <div onClick={handleAuth}>Login</div> */}
-            <div onClick={handleEmailPassAuth}>Email/pass login</div>
+            {/* <div onClick={handleEmailPassAuth}>Email/pass login</div> */}
           </div>
         )}
         <FormContainer>
@@ -85,75 +88,75 @@ const Login = (props) => {
               selected={showLoginForm}
               onClick={() => setShowLoginForm(true)}
             >
-              Login
+              {t('login')}
             </LoginOrSignUp>
             <LoginOrSignUp
               selected={!showLoginForm}
               onClick={() => setShowLoginForm(false)}
             >
-              Sign Up
+              {t('signup')}
             </LoginOrSignUp>
           </FormContainerHeader>
           {showLoginForm ? (
             <LoginForm onSubmit={handleEmailPassAuth}>
               <Input
                 required
-                type="email"
-                placeholder="Email"
+                type='email'
+                placeholder={t('loginForm_email')}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type="password"
-                placeholder="Password"
+                type='password'
+                placeholder={t('loginForm_password')}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton type="submit">Login</FormButton>
-              <OAuthButton onClick={handleAuth}>G</OAuthButton>
-              <OAuthButton>42</OAuthButton>
+              <FormButton type='submit'>{t('login')}</FormButton>
+              <OAuthButton onClick={handleAuth}>{t('login_google')}</OAuthButton>
+              <OAuthButton>{t('login_42')}</OAuthButton>
             </LoginForm>
           ) : (
             <SignUpForm onSubmit={handleEmailPassSignUp}>
               <Input
                 required
-                type="text"
-                placeholder="First Name"
+                type='text'
+                placeholder={t('signUpForm_firstname')}
                 onChange={(e) => setFirstName(e.target.value)}
                 value={firstName}
               />
               <Input
                 required
-                type="text"
-                placeholder="Last Name"
+                type='text'
+                placeholder={t('signUpForm_lastname')}
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
               />
               <Input
                 required
-                type="text"
-                placeholder="Username"
+                type='text'
+                placeholder={t('signUpForm_userName')}
                 onChange={(e) => setUserName(e.target.value)}
                 value={userName}
               />
               <Input
                 required
-                type="email"
-                placeholder="Email"
+                type='email'
+                placeholder={t('signUpForm_email')}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type="password"
-                placeholder="Password"
+                type='password'
+                placeholder={t('signUpForm_password')}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton>Sign Up</FormButton>
-              <OAuthButton onClick={handleAuth}>G</OAuthButton>
-              <OAuthButton>42</OAuthButton>
+              <FormButton>{t('signup')}</FormButton>
+              <OAuthButton onClick={handleAuth}>{t('signup_google')}</OAuthButton>
+              <OAuthButton>{t('signup_42')}</OAuthButton>
             </SignUpForm>
           )}
         </FormContainer>
@@ -176,7 +179,7 @@ const BgImage = styled.div`
   background-position: top;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("/images/login-background.jpg");
+  background-image: url('/images/login-background.jpg');
   position: absolute;
   top: 0;
   right: 0;
@@ -269,7 +272,7 @@ const LoginOrSignUp = styled.div`
   cursor: pointer;
   height: 30px;
   margin-top: 5px;
-  border-bottom: ${(props) => (props.selected ? "0.01px" : "0px")} solid gray;
+  border-bottom: ${(props) => (props.selected ? '0.01px' : '0px')} solid gray;
   font-weight: bold;
 `;
 
