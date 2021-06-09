@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { EightBitLoader } from 'react-loaders-kit';
+
 
 const Login = (props) => {
   const [loginStatus, setLoginStatus] = useState(0);
@@ -15,12 +17,24 @@ const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  
 
   const { t } = useTranslation();
+
+  const loaderProps = {
+    loading,
+    size: 35,
+    duration: 1,
+    color: '#f9f9f9'
+}
+
 
   const handleAuth = (e) => {
     e.preventDefault();
     setDisabled(true);
+    setLoading(true);
     if (!loginStatus) {
       auth
         .signInWithPopup(provider)
@@ -48,6 +62,7 @@ const Login = (props) => {
   const handleEmailPassAuth = (e) => {
     e.preventDefault();
     setDisabled(true);
+    setLoading(true);
     console.log('Login', email, password);
     auth
       .signInWithEmailAndPassword(email, password)
@@ -65,6 +80,7 @@ const Login = (props) => {
   const handleEmailPassSignUp = (e) => {
     e.preventDefault();
     setDisabled(true);
+    setLoading(true);
     console.log('Signup', email, password, firstName, lastName, userName);
 
     auth
@@ -81,7 +97,7 @@ const Login = (props) => {
   const schoolLogin = (e) => {
     e.preventDefault();
     setDisabled(true);
-
+    setLoading(true);
     const client_id =
       'ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341';
     axios
@@ -152,6 +168,9 @@ const Login = (props) => {
               <Link to='/forgotPassword'>
                 <ForgotPassword>{t('forgotPassword')}</ForgotPassword>
               </Link>
+              {<Loader>
+                <EightBitLoader {...loaderProps}/>
+              </Loader>}
               <FormButton type='submit' disabled={disabled}>{t('login')}</FormButton>
               <OAuthButton onClick={handleAuth} disabled={disabled}>
                 {t('login_google')}
@@ -297,6 +316,11 @@ const Input = styled.input`
 `;
 const LoginForm = styled.form``;
 const SignUpForm = styled.form``;
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const FormButton = styled.button`
   background: #20325a;
   margin-top: 20px;
