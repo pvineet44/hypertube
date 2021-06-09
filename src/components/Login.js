@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
+import axios from "axios";
 
 const Login = (props) => {
   const [loginStatus, setLoginStatus] = useState(0);
@@ -68,6 +69,34 @@ const Login = (props) => {
       .catch((error) => alert(error.message));
   };
 
+  const schoolLogin = (e) => {
+    e.preventDefault();
+
+    const client_id =
+      "ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341";
+    axios
+      .get(
+        `https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code`
+      )
+      // .then((response) => response.json())
+      .then((data) => console.log("DATA", data));
+  };
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       grant_type: "client_credentials",
+  //       client_id:
+  //         "ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341",
+  //       client_secret:
+  //         "4c2594f3ba22d3de2c8f215233423b6cfc7ca139af030e745a722fa905a11424",
+  //     }),
+  //   };
+  //   fetch("https://api.intra.42.fr/oauth/token", requestOptions)
+  //     .then((response) => response.json())
+  //     .then((data) => console.log("DATA", data));
+  // };
+
   return (
     <Container>
       <Content>
@@ -112,7 +141,11 @@ const Login = (props) => {
               />
               <FormButton type="submit">Login</FormButton>
               <OAuthButton onClick={handleAuth}>G</OAuthButton>
-              <OAuthButton>42</OAuthButton>
+              <OAuthButton /*onClick={schoolLogin}*/>
+                <a href="https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code&state=abcde">
+                  42
+                </a>
+              </OAuthButton>
             </LoginForm>
           ) : (
             <SignUpForm onSubmit={handleEmailPassSignUp}>
@@ -283,6 +316,7 @@ const Input = styled.input`
   color: white;
   ::-webkit-input-placeholder {
     color: white;
+    font-size: 15px;
   }
   :focus {
     outline: none;
@@ -308,5 +342,9 @@ const OAuthButton = styled.button`
   color: white;
   border: none;
   font-weight: bold;
+  a {
+    width: 100%;
+    height: 100%;
+  }
 `;
 export default Login;
