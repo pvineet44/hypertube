@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import i18n from '../translations/i18n';
+import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { Link } from 'react-router-dom';
 
 function Header({ lang, changeLang }) {
-  const handleAuth = () => {
-    console.log('handle auth');
-  };
+
+  const [user, setUser] = useState('null');
+  const userPhoto = 'https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo';
+  const userName = 'VP';
+  const { t } = useTranslation();
+
+  const signout = () => {
+    console.log('signout')
+  }
 
   return (
     <Nav>
@@ -23,9 +30,15 @@ function Header({ lang, changeLang }) {
             <span onClick={() => changeLang('fr')}>FR</span>
           </DropDown>
         </SignOut>
-        <Link to='/'>
-          <Login onClick={handleAuth}>Login / Signup</Login>
-        </Link>
+        {!user ? (<SignOut>
+            <UserImg src={userPhoto} alt={userName} />
+            <DropDown>
+              <span onClick={signout}>Sign out</span>
+            </DropDown>
+          </SignOut>) : (<Link to='/'>
+          <Login>{t('loginSignup')} </Login>
+        </Link>) }
+        
       </RightSection>
     </Nav>
   );
@@ -102,6 +115,10 @@ const DropDown = styled.div`
   span {
     margin: 2px;
   }
+`;
+
+const UserImg = styled.img`
+  height: 100%;
 `;
 
 const SignOut = styled.div`

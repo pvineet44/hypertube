@@ -16,5 +16,6 @@ export const TRANSLATIONS_FR = {
     forgotPassword: "Mot de passe oublié?",
     resetPassword: "Réinitialiser le mot de passe",
     resetPasswordInstruction: "Saisissez votre adresse email pour réinitialisez votre mot de passe",
-    pleaseWait: "S'il vous plaît, attendez..."
+    pleaseWait: "S'il vous plaît, attendez...",
+    loginSignup: "Se connecter / S'inscrire",
    };

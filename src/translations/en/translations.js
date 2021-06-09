@@ -19,5 +19,6 @@ export const TRANSLATIONS_EN = {
     forgotPassword: "Forgot password?",
     resetPassword: "Reset Password",
     resetPasswordInstruction: "Enter your email address to reset your password",
-    pleaseWait: "Please wait..."
+    pleaseWait: "Please wait...",
+    loginSignup: "LOGIN / SIGNUP",
    };
