@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Header from './components/Header';
 import i18n from './translations/i18n';
 import './translations/i18n';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
   const [language, setLanguage] = useState('en');
@@ -22,6 +23,9 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <Login lang={language} />
+          </Route>
+          <Route exact path='/forgotPassword'>
+            <ForgotPassword lang={language}/>
           </Route>
         </Switch>
       </Router>

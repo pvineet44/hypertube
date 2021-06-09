@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { auth, provider } from '../firebase';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
+import { Link } from 'react-router-dom';
 
 const Login = (props) => {
   const [loginStatus, setLoginStatus] = useState(0);
@@ -113,6 +114,9 @@ const Login = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
+              <Link to='/forgotPassword'>
+                <ForgotPassword>{t('forgotPassword')}</ForgotPassword>
+              </Link>
               <FormButton type='submit'>{t('login')}</FormButton>
               <OAuthButton onClick={handleAuth}>
                 {t('login_google')}
@@ -277,4 +281,10 @@ const OAuthButton = styled.button`
     cursor: pointer;
   }
 `;
+
+const ForgotPassword = styled.div`
+  color: #f9f9f9;
+  cursor: pointer;
+`;
+
 export default Login;

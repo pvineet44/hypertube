@@ -8,7 +8,7 @@ export const TRANSLATIONS_EN = {
     login_google: "Login using Google",
     signup: "Sign Up",
     signup_42: "Sign up using 42",
-    signup_google: "Sign up using 42",
+    signup_google: "Sign up using google",
     loginForm_email: "Email Address",
     loginForm_password: "Password",
     signUpForm_firstname: "First Name",
@@ -16,4 +16,6 @@ export const TRANSLATIONS_EN = {
     signUpForm_userName: "Username",
     signUpForm_email: "Email Address",
     signUpForm_password: "Password",
+    forgotPassword: "Forgot password?",
+    resetPassword: "Reset Password",
    };
