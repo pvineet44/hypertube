@@ -4,27 +4,29 @@ import { auth, provider } from '../firebase';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { Link } from 'react-router-dom';
-import axios from "axios";
-
+import axios from 'axios';
 
 const Login = (props) => {
   const [loginStatus, setLoginStatus] = useState(0);
   const [showLoginForm, setShowLoginForm] = useState(true);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [disabled, setDisabled] = useState(false);
+
   const { t } = useTranslation();
 
   const handleAuth = (e) => {
     e.preventDefault();
+    setDisabled(true);
     if (!loginStatus) {
       auth
         .signInWithPopup(provider)
         .then((result) => {
           // setUser(result.user);
-          console.log("USER", result.user);
+          console.log('USER', result.user);
           setLoginStatus(1);
         })
         .catch((error) => {
@@ -36,7 +38,7 @@ const Login = (props) => {
         .then(() => {
           // dispatch(setSignOutState());
           // history.push("/");
-          console.log("LO");
+          console.log('LO');
           setLoginStatus(0);
         })
         .catch((err) => alert(err.message));
@@ -45,11 +47,12 @@ const Login = (props) => {
 
   const handleEmailPassAuth = (e) => {
     e.preventDefault();
-    console.log("Login", email, password);
+    setDisabled(true);
+    console.log('Login', email, password);
     auth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log("EMAIL/PASS", auth);
+        console.log('EMAIL/PASS', auth);
         setLoginStatus(1);
 
         // if (auth) {
@@ -61,12 +64,13 @@ const Login = (props) => {
 
   const handleEmailPassSignUp = (e) => {
     e.preventDefault();
-    console.log("Signup", email, password, firstName, lastName, userName);
+    setDisabled(true);
+    console.log('Signup', email, password, firstName, lastName, userName);
 
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
-        console.log("SignUp", auth);
+        console.log('SignUp', auth);
         // if (auth) {
         //   history.push("/");
         // }
@@ -76,15 +80,16 @@ const Login = (props) => {
 
   const schoolLogin = (e) => {
     e.preventDefault();
+    setDisabled(true);
 
     const client_id =
-      "ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341";
+      'ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341';
     axios
       .get(
         `https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code`
       )
       // .then((response) => response.json())
-      .then((data) => console.log("DATA", data));
+      .then((data) => console.log('DATA', data));
   };
   //   const requestOptions = {
   //     method: "POST",
@@ -106,7 +111,7 @@ const Login = (props) => {
     <Container>
       <Content>
         {loginStatus ? (
-          <div onClick={handleAuth}>{t("logout")}</div>
+          <div onClick={handleAuth}>{t('logout')}</div>
         ) : (
           <div>
             {/* <div onClick={handleAuth}>Login</div> */}
@@ -119,41 +124,41 @@ const Login = (props) => {
               selected={showLoginForm}
               onClick={() => setShowLoginForm(true)}
             >
-              {t("login")}
+              {t('login')}
             </LoginOrSignUp>
             <LoginOrSignUp
               selected={!showLoginForm}
               onClick={() => setShowLoginForm(false)}
             >
-              {t("signup")}
+              {t('signup')}
             </LoginOrSignUp>
           </FormContainerHeader>
           {showLoginForm ? (
             <LoginForm onSubmit={handleEmailPassAuth}>
               <Input
                 required
-                type="email"
-                placeholder={t("loginForm_email")}
+                type='email'
+                placeholder={t('loginForm_email')}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type="password"
-                placeholder={t("loginForm_password")}
+                type='password'
+                placeholder={t('loginForm_password')}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
               <Link to='/forgotPassword'>
                 <ForgotPassword>{t('forgotPassword')}</ForgotPassword>
               </Link>
-              <FormButton type="submit">{t("login")}</FormButton>
-              <OAuthButton onClick={handleAuth}>
-                {t("login_google")}
+              <FormButton type='submit' disabled={disabled}>{t('login')}</FormButton>
+              <OAuthButton onClick={handleAuth} disabled={disabled}>
+                {t('login_google')}
               </OAuthButton>
-              <OAuthButton>
-                <a href="https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code&state=abcde">
-                  {t("login_42")}
+              <OAuthButton disabled={disabled}>
+                <a href='https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code&state=abcde'>
+                  {t('login_42')}
                 </a>
               </OAuthButton>
             </LoginForm>
@@ -161,44 +166,46 @@ const Login = (props) => {
             <SignUpForm onSubmit={handleEmailPassSignUp}>
               <Input
                 required
-                type="text"
-                placeholder={t("signUpForm_firstname")}
+                type='text'
+                placeholder={t('signUpForm_firstname')}
                 onChange={(e) => setFirstName(e.target.value)}
                 value={firstName}
               />
               <Input
                 required
-                type="text"
-                placeholder={t("signUpForm_lastname")}
+                type='text'
+                placeholder={t('signUpForm_lastname')}
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
               />
               <Input
                 required
-                type="text"
-                placeholder={t("signUpForm_userName")}
+                type='text'
+                placeholder={t('signUpForm_userName')}
                 onChange={(e) => setUserName(e.target.value)}
                 value={userName}
               />
               <Input
                 required
-                type="email"
-                placeholder={t("signUpForm_email")}
+                type='email'
+                placeholder={t('signUpForm_email')}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type="password"
-                placeholder={t("signUpForm_password")}
+                type='password'
+                placeholder={t('signUpForm_password')}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton>{t("signup")}</FormButton>
-              <OAuthButton onClick={handleAuth}>
-                {t("signup_google")}
+              <FormButton disabled={disabled}>
+                {t('signup')}
+              </FormButton>
+              <OAuthButton onClick={handleAuth} disabled={disabled}>
+                {t('signup_google')}
               </OAuthButton>
-              <OAuthButton>{t("signup_42")}</OAuthButton>
+              <OAuthButton>{t('signup_42')}</OAuthButton>
             </SignUpForm>
           )}
         </FormContainer>
@@ -221,7 +228,7 @@ const BgImage = styled.div`
   background-position: top;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url("/images/login-background.jpg");
+  background-image: url('/images/login-background.jpg');
   position: absolute;
   top: 0;
   right: 0;
@@ -265,7 +272,7 @@ const LoginOrSignUp = styled.div`
   cursor: pointer;
   height: 30px;
   margin-top: 5px;
-  border-bottom: ${(props) => (props.selected ? "0.01px" : "0px")} solid gray;
+  border-bottom: ${(props) => (props.selected ? '0.01px' : '0px')} solid gray;
   font-weight: bold;
 `;
 

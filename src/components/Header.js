@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import i18n from '../translations/i18n';
 import '../translations/i18n';
+import { Link } from 'react-router-dom';
 
-function Header({lang, changeLang}) {
+function Header({ lang, changeLang }) {
   const handleAuth = () => {
     console.log('handle auth');
   };
-  
+
   return (
     <Nav>
       <Logo>
@@ -15,14 +16,17 @@ function Header({lang, changeLang}) {
       </Logo>
       <RightSection>
         <SignOut>
-          {lang}<i className="fa fa-chevron-down"></i>
+          {lang}
+          <i className='fa fa-chevron-down'></i>
           <DropDown>
             <span onClick={() => changeLang('en')}>EN</span>
             <span onClick={() => changeLang('fr')}>FR</span>
           </DropDown>
         </SignOut>
-        <Login onClick={handleAuth}>Login / Signup</Login>
-        </RightSection>
+        <Link to='/'>
+          <Login onClick={handleAuth}>Login / Signup</Login>
+        </Link>
+      </RightSection>
     </Nav>
   );
 }
@@ -30,7 +34,6 @@ function Header({lang, changeLang}) {
 const RightSection = styled.div`
   display: flex;
   align-items: center;
-
 `;
 
 const Nav = styled.nav`

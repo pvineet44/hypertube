@@ -18,5 +18,6 @@ export const TRANSLATIONS_EN = {
     signUpForm_password: "Password",
     forgotPassword: "Forgot password?",
     resetPassword: "Reset Password",
-    resetPasswordInstruction: "Enter your email address to reset your password"
+    resetPasswordInstruction: "Enter your email address to reset your password",
+    pleaseWait: "Please wait..."
    };
