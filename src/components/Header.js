@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import i18n from "../translations/i18n";
+import { useTranslation } from "react-i18next";
 import "../translations/i18n";
-import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { login, logout } from "../actions/index";
 import { useHistory } from "react-router";
 import { auth } from "../firebase";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 function Header({ lang, changeLang }) {
+  const [user, setUser] = useState("null");
+  const userPhoto =
+    "https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo";
+  const userName = "VP";
+  const { t } = useTranslation();
   const history = useHistory();
   const loggedInUser = useSelector((state) => state.loggedInUser);
   const dispatch = useDispatch();
-
-  const handleAuth = () => {
+  const signout = () => {
     if (loggedInUser) {
       auth
         .signOut()
@@ -24,7 +31,7 @@ function Header({ lang, changeLang }) {
           history.push("/");
         })
         .catch((err) => alert(err.message));
-    } else history.push("/");
+    }
   };
 
   return (
@@ -42,9 +49,16 @@ function Header({ lang, changeLang }) {
           </DropDown>
         </SignOut>
         {loggedInUser ? (
-          <Login onClick={handleAuth}>Logout</Login>
+          <SignOut>
+            <UserImg src={userPhoto} alt={userName} />
+            <DropDown>
+              <span onClick={signout}>Sign out</span>
+            </DropDown>
+          </SignOut>
         ) : (
-          <Login onClick={handleAuth}>Login / Signup</Login>
+          <Link to="/">
+            <Login>{t("loginSignup")} </Login>
+          </Link>
         )}
       </RightSection>
     </Nav>
@@ -122,6 +136,10 @@ const DropDown = styled.div`
   span {
     margin: 2px;
   }
+`;
+
+const UserImg = styled.img`
+  height: 100%;
 `;
 
 const SignOut = styled.div`
