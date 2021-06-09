@@ -1,12 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { auth, provider } from "../firebase";
+import db, { auth, provider } from "../firebase";
 import { useTranslation } from "react-i18next";
 import "../translations/i18n";
 import axios from "axios";
+import { useHistory } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout } from "../actions/index";
+import { googleApi, schoolAuthLink, userCollection } from "../properties";
 
 const Login = (props) => {
-  const [loginStatus, setLoginStatus] = useState(0);
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,28 +17,58 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { t } = useTranslation();
+  const history = useHistory();
+  const loggedInUser = useSelector((state) => state.loggedInUser);
+  const dispatch = useDispatch();
+
+  const googleLoginOrSignup = () => {
+    auth
+      .signInWithPopup(provider)
+      .then((result) => {
+        console.log("USER", result);
+        db.collection(userCollection)
+          .doc(result.user?.uid)
+          .get()
+          .then((snapshot) => {
+            console.log(snapshot.data());
+            dispatch(
+              login({
+                id: result.user.uid,
+                authType: "googleAuth",
+                accessToken: result.credential.accessToken,
+              })
+            );
+            if (!snapshot.data()) {
+              axios
+                .get(googleApi + result.credential.accessToken)
+                .then((res) => {
+                  console.log("GOOGLE API", res);
+                  db.collection(userCollection).doc(result.user?.uid).set({
+                    firstName: res.data.given_name,
+                    lastName: res.data.family_name,
+                    email: res.data.email,
+                    photo: res.data.picture,
+                  });
+                  history.push("/home");
+                });
+            } else history.push("/home");
+          });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
   const handleAuth = (e) => {
     e.preventDefault();
-    if (!loginStatus) {
-      auth
-        .signInWithPopup(provider)
-        .then((result) => {
-          // setUser(result.user);
-          console.log("USER", result.user);
-          setLoginStatus(1);
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    } else if (loginStatus) {
+    if (!loggedInUser) {
+      googleLoginOrSignup();
+    } else if (loggedInUser) {
       auth
         .signOut()
         .then(() => {
-          // dispatch(setSignOutState());
-          // history.push("/");
           console.log("LO");
-          setLoginStatus(0);
+          dispatch(logout());
         })
         .catch((err) => alert(err.message));
     }
@@ -48,11 +81,10 @@ const Login = (props) => {
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
         console.log("EMAIL/PASS", auth);
-        setLoginStatus(1);
-
-        // if (auth) {
-        //   // history.push("/");
-        // }
+        dispatch(login({ id: auth.user.uid, authType: "emailPass" }));
+        if (auth) {
+          history.push("/home");
+        }
       })
       .catch((error) => alert(error.message));
   };
@@ -65,52 +97,23 @@ const Login = (props) => {
       .createUserWithEmailAndPassword(email, password)
       .then((auth) => {
         console.log("SignUp", auth);
-        // if (auth) {
-        //   history.push("/");
-        // }
+        if (auth) {
+          db.collection("users").doc(auth.user?.uid).set({
+            firstName: firstName,
+            lastName: lastName,
+            userName: userName,
+            email: email,
+          });
+          dispatch(login({ id: auth.user.uid, authType: "emailPass" }));
+          history.push("/home");
+        }
       })
       .catch((error) => alert(error.message));
   };
 
-  const schoolLogin = (e) => {
-    e.preventDefault();
-
-    const client_id =
-      "ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341";
-    axios
-      .get(
-        `https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code`
-      )
-      // .then((response) => response.json())
-      .then((data) => console.log("DATA", data));
-  };
-  //   const requestOptions = {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       grant_type: "client_credentials",
-  //       client_id:
-  //         "ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341",
-  //       client_secret:
-  //         "4c2594f3ba22d3de2c8f215233423b6cfc7ca139af030e745a722fa905a11424",
-  //     }),
-  //   };
-  //   fetch("https://api.intra.42.fr/oauth/token", requestOptions)
-  //     .then((response) => response.json())
-  //     .then((data) => console.log("DATA", data));
-  // };
-
   return (
     <Container>
       <Content>
-        {loginStatus ? (
-          <div onClick={handleAuth}>{t("logout")}</div>
-        ) : (
-          <div>
-            {/* <div onClick={handleAuth}>Login</div> */}
-            {/* <div onClick={handleEmailPassAuth}>Email/pass login</div> */}
-          </div>
-        )}
         <FormContainer>
           <FormContainerHeader>
             <LoginOrSignUp
@@ -147,9 +150,7 @@ const Login = (props) => {
                 {t("login_google")}
               </OAuthButton>
               <OAuthButton>
-                <a href="https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code&state=abcde">
-                  {t("login_42")}
-                </a>
+                <a href={schoolAuthLink}>{t("login_42")}</a>
               </OAuthButton>
             </LoginForm>
           ) : (
@@ -193,7 +194,9 @@ const Login = (props) => {
               <OAuthButton onClick={handleAuth}>
                 {t("signup_google")}
               </OAuthButton>
-              <OAuthButton>{t("signup_42")}</OAuthButton>
+              <OAuthButton>
+                <a href={schoolAuthLink}>{t("signup_42")}</a>
+              </OAuthButton>
             </SignUpForm>
           )}
         </FormContainer>

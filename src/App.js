@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import i18n from "./translations/i18n";
 import "./translations/i18n";
 import Home from "./components/Home";
+import SchoolAuth from "./components/SchoolAuth";
 
 function App() {
   const [language, setLanguage] = useState("en");
@@ -22,6 +23,9 @@ function App() {
         <Header lang={language} changeLang={changeLang} />
         <Switch>
           <Route exact path="/schoolAuth">
+            <SchoolAuth />
+          </Route>
+          <Route exact path="/home">
             <Home />
           </Route>
           <Route exact path="/">

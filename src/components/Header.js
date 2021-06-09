@@ -1,28 +1,52 @@
-import React from 'react';
-import styled from 'styled-components';
-import i18n from '../translations/i18n';
-import '../translations/i18n';
+import React from "react";
+import styled from "styled-components";
+import i18n from "../translations/i18n";
+import "../translations/i18n";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout } from "../actions/index";
+import { useHistory } from "react-router";
+import { auth } from "../firebase";
 
-function Header({lang, changeLang}) {
+function Header({ lang, changeLang }) {
+  const history = useHistory();
+  const loggedInUser = useSelector((state) => state.loggedInUser);
+  const dispatch = useDispatch();
+
   const handleAuth = () => {
-    console.log('handle auth');
+    if (loggedInUser) {
+      auth
+        .signOut()
+        .then(() => {
+          // dispatch(setSignOutState());
+          // history.push("/");
+          console.log("LO");
+          dispatch(logout());
+          history.push("/");
+        })
+        .catch((err) => alert(err.message));
+    } else history.push("/");
   };
-  
+
   return (
     <Nav>
       <Logo>
-        <img src='/images/logo.svg' alt='Disney+' />
+        <img src="/images/logo.svg" alt="Disney+" />
       </Logo>
       <RightSection>
         <SignOut>
-          {lang}<i className="fa fa-chevron-down"></i>
+          {lang}
+          <i className="fa fa-chevron-down"></i>
           <DropDown>
-            <span onClick={() => changeLang('en')}>EN</span>
-            <span onClick={() => changeLang('fr')}>FR</span>
+            <span onClick={() => changeLang("en")}>EN</span>
+            <span onClick={() => changeLang("fr")}>FR</span>
           </DropDown>
         </SignOut>
-        <Login onClick={handleAuth}>Login / Signup</Login>
-        </RightSection>
+        {loggedInUser ? (
+          <Login onClick={handleAuth}>Logout</Login>
+        ) : (
+          <Login onClick={handleAuth}>Login / Signup</Login>
+        )}
+      </RightSection>
     </Nav>
   );
 }
@@ -30,7 +54,6 @@ function Header({lang, changeLang}) {
 const RightSection = styled.div`
   display: flex;
   align-items: center;
-
 `;
 
 const Nav = styled.nav`
