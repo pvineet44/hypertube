@@ -7,9 +7,11 @@ import Header from './components/Header';
 import i18n from './translations/i18n';
 import './translations/i18n';
 import ForgotPassword from './components/ForgotPassword';
+import Home from "./components/Home";
+
 
 function App() {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState("en");
 
   const changeLang = (lang) => {
     setLanguage(lang);
@@ -17,11 +19,14 @@ function App() {
   };
 
   return (
-    <div className='App'>
+    <div className="App">
       <Router>
         <Header lang={language} changeLang={changeLang} />
         <Switch>
-          <Route exact path='/'>
+          <Route exact path="/schoolAuth">
+            <Home />
+          </Route>
+          <Route exact path="/">
             <Login lang={language} />
           </Route>
           <Route exact path='/forgotPassword'>

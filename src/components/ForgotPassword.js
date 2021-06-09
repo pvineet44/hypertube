@@ -3,24 +3,30 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { Link } from 'react-router-dom';
+import { auth, provider } from '../firebase';
+
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  //   const [password, setPassword] = useState('');
   const { t } = useTranslation();
 
-  const resetPassword = (e) => {
-    console.log('reset Password');
-  };
+    const resetPassword = (e) => {
+        e.preventDefault();
+        auth.sendPasswordResetEmail(email).then(function() {
+            // Email sent.
+          }).catch(function(error) {
+            // An error happened.
+          });
+          
+    };
 
   return (
     <Container>
       <Content>
         <FormContainer>
-          <FormContainerHeader>
-            <LoginOrSignUp>{t('resetPassword')}</LoginOrSignUp>
-          </FormContainerHeader>
-          <LoginForm onSubmit={resetPassword}>
+          <ForgotPasswordForm onSubmit={resetPassword}>
+          {t('resetPasswordInstruction')}
             <Input
               required
               type='email'
@@ -28,18 +34,8 @@ function ForgotPassword() {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
-            <Input
-              required
-              type='password'
-              placeholder={t('loginForm_password')}
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-            <Link to='/forgotPassword'>
-              <ForgotPassword>{t('forgotPassword')}</ForgotPassword>
-            </Link>
-            <FormButton type='submit'>{t('login')}</FormButton>
-          </LoginForm>
+            <FormButton type='submit'>{t('resetPassword')}</FormButton>
+          </ForgotPasswordForm>
         </FormContainer>
         <BgImage />
       </Content>
@@ -80,7 +76,6 @@ const Content = styled.div`
   flex-direction: column;
   padding: 80px 40px;
   height: 100%;
-  background-color: violet;
 `;
 
 const FormContainer = styled.div`
@@ -124,7 +119,7 @@ const Input = styled.input`
     outline: none;
   }
 `;
-const LoginForm = styled.form``;
+const ForgotPasswordForm = styled.form``;
 const SignUpForm = styled.form``;
 const FormButton = styled.button`
   background: #20325a;
