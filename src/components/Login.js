@@ -274,6 +274,7 @@ const FormContainer = styled.div`
   max-width: 500px;
   border: 1px solid #635e5e55;
   padding: 10px;
+  margin-top: 70px;
 `;
 
 const FormContainerHeader = styled.div`
@@ -315,7 +316,8 @@ const Input = styled.input`
   }
 `;
 const LoginForm = styled.form``;
-const SignUpForm = styled.form``;
+const SignUpForm = styled.form`
+`;
 const Loader = styled.div`
   display: flex;
   justify-content: center;
