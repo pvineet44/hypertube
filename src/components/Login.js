@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
+import { useTranslation } from "react-i18next";
+import "../translations/i18n";
 import axios from "axios";
 
 const Login = (props) => {
@@ -11,6 +13,7 @@ const Login = (props) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { t } = useTranslation();
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -101,11 +104,11 @@ const Login = (props) => {
     <Container>
       <Content>
         {loginStatus ? (
-          <div onClick={handleAuth}>Logout</div>
+          <div onClick={handleAuth}>{t("logout")}</div>
         ) : (
           <div>
             {/* <div onClick={handleAuth}>Login</div> */}
-            <div onClick={handleEmailPassAuth}>Email/pass login</div>
+            {/* <div onClick={handleEmailPassAuth}>Email/pass login</div> */}
           </div>
         )}
         <FormContainer>
@@ -114,13 +117,13 @@ const Login = (props) => {
               selected={showLoginForm}
               onClick={() => setShowLoginForm(true)}
             >
-              Login
+              {t("login")}
             </LoginOrSignUp>
             <LoginOrSignUp
               selected={!showLoginForm}
               onClick={() => setShowLoginForm(false)}
             >
-              Sign Up
+              {t("signup")}
             </LoginOrSignUp>
           </FormContainerHeader>
           {showLoginForm ? (
@@ -128,22 +131,24 @@ const Login = (props) => {
               <Input
                 required
                 type="email"
-                placeholder="Email"
+                placeholder={t("loginForm_email")}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
                 type="password"
-                placeholder="Password"
+                placeholder={t("loginForm_password")}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton type="submit">Login</FormButton>
-              <OAuthButton onClick={handleAuth}>G</OAuthButton>
-              <OAuthButton /*onClick={schoolLogin}*/>
+              <FormButton type="submit">{t("login")}</FormButton>
+              <OAuthButton onClick={handleAuth}>
+                {t("login_google")}
+              </OAuthButton>
+              <OAuthButton>
                 <a href="https://api.intra.42.fr/oauth/authorize?client_id=ef6114cc3634836b3c0b8e616e3f1f7cf856af80a8dee0d5593f194b100ad341&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FschoolAuth&response_type=code&state=abcde">
-                  42
+                  {t("login_42")}
                 </a>
               </OAuthButton>
             </LoginForm>
@@ -152,41 +157,43 @@ const Login = (props) => {
               <Input
                 required
                 type="text"
-                placeholder="First Name"
+                placeholder={t("signUpForm_firstname")}
                 onChange={(e) => setFirstName(e.target.value)}
                 value={firstName}
               />
               <Input
                 required
                 type="text"
-                placeholder="Last Name"
+                placeholder={t("signUpForm_lastname")}
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
               />
               <Input
                 required
                 type="text"
-                placeholder="Username"
+                placeholder={t("signUpForm_userName")}
                 onChange={(e) => setUserName(e.target.value)}
                 value={userName}
               />
               <Input
                 required
                 type="email"
-                placeholder="Email"
+                placeholder={t("signUpForm_email")}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
                 type="password"
-                placeholder="Password"
+                placeholder={t("signUpForm_password")}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton>Sign Up</FormButton>
-              <OAuthButton onClick={handleAuth}>G</OAuthButton>
-              <OAuthButton>42</OAuthButton>
+              <FormButton>{t("signup")}</FormButton>
+              <OAuthButton onClick={handleAuth}>
+                {t("signup_google")}
+              </OAuthButton>
+              <OAuthButton>{t("signup_42")}</OAuthButton>
             </SignUpForm>
           )}
         </FormContainer>
@@ -231,55 +238,6 @@ const Content = styled.div`
   height: 100%;
 `;
 
-const CTA = styled.div`
-  max-width: 650px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const CTALogoOne = styled.img`
-  margin-bottom: 12px;
-  max-width: 600px;
-  min-height: 1px;
-  display: block;
-  width: 100%;
-`;
-
-const SignUp = styled.a`
-  font-weight: bold;
-  color: #f9f9f9;
-  background-color: #0063e5;
-  margin-bottom: 12px;
-  width: 100%;
-  letter-spacing: 1.5px;
-  font-size: 18px;
-  padding: 16.5px 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: #0483ee;
-    cursor: pointer;
-  }
-`;
-
-const Description = styled.p`
-  color: hsla(0, 0%, 95.3%, 1);
-  font-size: 11px;
-  margin: 0 0 24px;
-  line-height: 1.5;
-  letter-spacing: 1.5px;
-`;
-
-const CTALogoTwo = styled.img`
-  max-width: 600px;
-  margin-bottom: 20px;
-  display: inline-block;
-  vertical-align: bottom;
-  width: 100%;
-`;
-
 const FormContainer = styled.div`
   width: 90%;
   max-width: 500px;
@@ -311,8 +269,11 @@ const Input = styled.input`
   border: none;
   border-bottom: 0.5px solid #635e5e55;
   margin-top: 40px;
-  margin-botton: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  font-size: 15px;
   width: 100%;
+  padding-left: 12px;
   color: white;
   ::-webkit-input-placeholder {
     color: white;
@@ -332,6 +293,11 @@ const FormButton = styled.button`
   color: white;
   border: none;
   font-weight: bold;
+  border-radius: 2px;
+  &:hover {
+    background-color: #3c5faa;
+    cursor: pointer;
+  }
 `;
 
 const OAuthButton = styled.button`
@@ -345,6 +311,11 @@ const OAuthButton = styled.button`
   a {
     width: 100%;
     height: 100%;
+  }
+  border-radius: 2px;
+  &:hover {
+    background-color: #3c5faa;
+    cursor: pointer;
   }
 `;
 export default Login;

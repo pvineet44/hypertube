@@ -25,6 +25,10 @@ a {
   }
 }
 
+.fa-chevron-down {
+  margin-left: 3px;
+}
+
 @media only screen and (min-width: 480px) and (max-width: 768px) {
   body {
     font-size: 15px;
