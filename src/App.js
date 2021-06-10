@@ -9,6 +9,7 @@ import './translations/i18n';
 import ForgotPassword from './components/ForgotPassword';
 import Home from "./components/Home";
 import Profile from './components/Profile';
+import SchoolAuth from "./components/SchoolAuth";
 
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
         <Header lang={language} changeLang={changeLang} />
         <Switch>
           <Route exact path="/schoolAuth">
+            <SchoolAuth />
+          </Route>
+          <Route exact path="/home">
             <Home />
           </Route>
           <Route exact path="/">

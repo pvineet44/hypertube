@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import i18n from '../translations/i18n';
-import { useTranslation } from 'react-i18next';
-import '../translations/i18n';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import i18n from "../translations/i18n";
+import { useTranslation } from "react-i18next";
+import "../translations/i18n";
+import { Link } from "react-router-dom";
+import { login, logout } from "../actions/index";
+import { useHistory } from "react-router";
+import { auth } from "../firebase";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 function Header({ lang, changeLang }) {
   const [user, setUser] = useState('null');
@@ -11,15 +16,29 @@ function Header({ lang, changeLang }) {
     'https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo';
   const userName = 'VP';
   const { t } = useTranslation();
-
+  const history = useHistory();
+  const loggedInUser = useSelector((state) => state.loggedInUser);
+  const dispatch = useDispatch();
   const signout = () => {
     console.log('signout');
+    if (loggedInUser) {
+      auth
+        .signOut()
+        .then(() => {
+          // dispatch(setSignOutState());
+          // history.push("/");
+          console.log("LO");
+          dispatch(logout());
+          history.push("/");
+        })
+        .catch((err) => alert(err.message));
+    }
   };
 
   return (
     <Nav>
       <Logo>
-        <img src='/images/logo.svg' alt='Disney+' />
+        <img src="/images/logo.svg" alt="Disney+" />
       </Logo>
       <RightSection>
         <Language>
@@ -30,9 +49,9 @@ function Header({ lang, changeLang }) {
             <span onClick={() => changeLang('fr')}>FR</span>
           </LanguageDropDown>
         </Language>
-        {user ? (
+        {loggedInUser ? (
           <SignOut>
-            <Link to='/profile'>
+            <Link>
             <UserImg src={userPhoto} alt={userName} />
             </Link>
             <DropDown>
@@ -40,8 +59,8 @@ function Header({ lang, changeLang }) {
             </DropDown>
           </SignOut>
         ) : (
-          <Link to='/'>
-            <Login>{t('loginSignup')} </Login>
+          <Link to="/">
+            <Login>{t("loginSignup")} </Login>
           </Link>
         )}
       </RightSection>
