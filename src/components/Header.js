@@ -6,15 +6,15 @@ import '../translations/i18n';
 import { Link } from 'react-router-dom';
 
 function Header({ lang, changeLang }) {
-
   const [user, setUser] = useState('null');
-  const userPhoto = 'https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo';
+  const userPhoto =
+    'https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo';
   const userName = 'VP';
   const { t } = useTranslation();
 
   const signout = () => {
-    console.log('signout')
-  }
+    console.log('signout');
+  };
 
   return (
     <Nav>
@@ -22,23 +22,28 @@ function Header({ lang, changeLang }) {
         <img src='/images/logo.svg' alt='Disney+' />
       </Logo>
       <RightSection>
-        <SignOut>
+        <Language>
           {lang}
           <i className='fa fa-chevron-down'></i>
-          <DropDown>
+          <LanguageDropDown>
             <span onClick={() => changeLang('en')}>EN</span>
             <span onClick={() => changeLang('fr')}>FR</span>
-          </DropDown>
-        </SignOut>
-        {!user ? (<SignOut>
+          </LanguageDropDown>
+        </Language>
+        {user ? (
+          <SignOut>
+            <Link to='/profile'>
             <UserImg src={userPhoto} alt={userName} />
+            </Link>
             <DropDown>
               <span onClick={signout}>Sign out</span>
             </DropDown>
-          </SignOut>) : (<Link to='/'>
-          <Login>{t('loginSignup')} </Login>
-        </Link>) }
-        
+          </SignOut>
+        ) : (
+          <Link to='/'>
+            <Login>{t('loginSignup')} </Login>
+          </Link>
+        )}
       </RightSection>
     </Nav>
   );
@@ -96,6 +101,27 @@ const Login = styled.a`
   }
 `;
 
+const LanguageDropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0px;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 52px;
+  opacity: 0;
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  span {
+    margin: 2px;
+  }
+`;
+
 const DropDown = styled.div`
   position: absolute;
   top: 48px;
@@ -107,7 +133,7 @@ const DropDown = styled.div`
   padding: 10px;
   font-size: 14px;
   letter-spacing: 3px;
-  width: 60px;
+  width: 90px;
   opacity: 0;
   letter-spacing: 1px;
   display: flex;
@@ -121,7 +147,7 @@ const UserImg = styled.img`
   height: 100%;
 `;
 
-const SignOut = styled.div`
+const Language = styled.div`
   position: relative;
   height: 48px;
   width: 48px;
@@ -132,6 +158,29 @@ const SignOut = styled.div`
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-right: 18px;
+
+  &:hover {
+    ${LanguageDropDown} {
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
+`;
+
+const SignOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  ${UserImg} {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+  }
 
   &:hover {
     ${DropDown} {

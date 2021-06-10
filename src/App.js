@@ -8,6 +8,7 @@ import i18n from './translations/i18n';
 import './translations/i18n';
 import ForgotPassword from './components/ForgotPassword';
 import Home from "./components/Home";
+import Profile from './components/Profile';
 
 
 function App() {
@@ -31,6 +32,9 @@ function App() {
           </Route>
           <Route exact path='/forgotPassword'>
             <ForgotPassword lang={language}/>
+          </Route>
+          <Route exact path='/profile'>
+            <Profile lang={language}/>
           </Route>
         </Switch>
       </Router>
