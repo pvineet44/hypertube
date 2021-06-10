@@ -1,16 +1,15 @@
-import logo from './logo.svg';
-import React, { useState } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from './components/Login';
-import Header from './components/Header';
-import i18n from './translations/i18n';
-import './translations/i18n';
-import ForgotPassword from './components/ForgotPassword';
+import logo from "./logo.svg";
+import React, { useState } from "react";
+import "./App.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "./components/Login";
+import Header from "./components/Header";
+import i18n from "./translations/i18n";
+import "./translations/i18n";
+import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
-import Profile from './components/Profile';
+import Profile from "./components/Profile";
 import SchoolAuth from "./components/SchoolAuth";
-
 
 function App() {
   const [language, setLanguage] = useState("en");
@@ -28,17 +27,17 @@ function App() {
           <Route exact path="/schoolAuth">
             <SchoolAuth />
           </Route>
-          <Route exact path="/home">
+          <Route exact path="/">
             <Home />
           </Route>
-          <Route exact path="/">
+          <Route exact path="/login">
             <Login lang={language} />
           </Route>
-          <Route exact path='/forgotPassword'>
-            <ForgotPassword lang={language}/>
+          <Route exact path="/forgotPassword">
+            <ForgotPassword lang={language} />
           </Route>
-          <Route exact path='/profile'>
-            <Profile lang={language}/>
+          <Route exact path="/profile">
+            <Profile lang={language} />
           </Route>
         </Switch>
       </Router>

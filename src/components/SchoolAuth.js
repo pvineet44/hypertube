@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import axios from "../axios";
 import db from "../firebase";
@@ -10,6 +10,8 @@ import {
   getMySchoolDetailsApi,
   schoolRedirectLink,
 } from "../properties";
+import { EightBitLoader } from "react-loaders-kit";
+import styled from "styled-components";
 
 function SchoolAuth() {
   const params = new URLSearchParams(window.location.search);
@@ -17,8 +19,10 @@ function SchoolAuth() {
   const history = useHistory();
   const loggedInUser = useSelector((state) => state.loggedInUser);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     if (code) {
       const requestOptions = {
         grant_type: "authorization_code",
@@ -57,13 +61,41 @@ function SchoolAuth() {
                     photo: res.data?.image_url,
                   });
                 }
-                history.replace("/home");
+                history.replace("/");
               });
           });
       });
     }
   }, []);
-  return <div></div>;
+
+  const loaderProps = {
+    loading,
+    size: 35,
+    duration: 1,
+    color: "#f9f9f9",
+  };
+
+  return (
+    <Container>
+      <Loader>
+        <EightBitLoader {...loaderProps} />
+      </Loader>
+    </Container>
+  );
 }
 
 export default SchoolAuth;
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
