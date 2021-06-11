@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import db, { auth, provider } from "../firebase";
 import { useTranslation } from "react-i18next";
@@ -8,28 +8,28 @@ import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../actions/index";
 import { googleApi, schoolAuthLink, userCollection } from "../properties";
-import '../translations/i18n';
-import { Link } from 'react-router-dom';
-import { EightBitLoader } from 'react-loaders-kit';
-
+import "../translations/i18n";
+import { Link } from "react-router-dom";
+import { EightBitLoader } from "react-loaders-kit";
 
 const Login = (props) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  
 
   const { t } = useTranslation();
   const history = useHistory();
   const loggedInUser = useSelector((state) => state.loggedInUser);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (loggedInUser) history.push("/");
+  }, []);
   const googleLoginOrSignup = () => {
     auth
       .signInWithPopup(provider)
@@ -58,9 +58,9 @@ const Login = (props) => {
                     email: res.data.email,
                     photo: res.data.picture,
                   });
-                  history.push("/home");
+                  history.push("/");
                 });
-            } else history.push("/home");
+            } else history.push("/");
           });
       })
       .catch((error) => {
@@ -72,9 +72,8 @@ const Login = (props) => {
     loading,
     size: 35,
     duration: 1,
-    color: '#f9f9f9'
-}
-
+    color: "#f9f9f9",
+  };
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -95,14 +94,14 @@ const Login = (props) => {
     e.preventDefault();
     setDisabled(true);
     setLoading(true);
-    console.log('Login', email, password);
+    console.log("Login", email, password);
     auth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
         console.log("EMAIL/PASS", auth);
         dispatch(login({ id: auth.user.uid, authType: "emailPass" }));
         if (auth) {
-          history.push("/home");
+          history.push("/");
         }
       })
       .catch((error) => alert(error.message));
@@ -112,7 +111,7 @@ const Login = (props) => {
     e.preventDefault();
     setDisabled(true);
     setLoading(true);
-    console.log('Signup', email, password, firstName, lastName, userName);
+    console.log("Signup", email, password, firstName, lastName, userName);
 
     auth
       .createUserWithEmailAndPassword(email, password)
@@ -126,7 +125,7 @@ const Login = (props) => {
             email: email,
           });
           dispatch(login({ id: auth.user.uid, authType: "emailPass" }));
-          history.push("/home");
+          history.push("/");
         }
       })
       .catch((error) => alert(error.message));
@@ -141,40 +140,44 @@ const Login = (props) => {
               selected={showLoginForm}
               onClick={() => setShowLoginForm(true)}
             >
-              {t('login')}
+              {t("login")}
             </LoginOrSignUp>
             <LoginOrSignUp
               selected={!showLoginForm}
               onClick={() => setShowLoginForm(false)}
             >
-              {t('signup')}
+              {t("signup")}
             </LoginOrSignUp>
           </FormContainerHeader>
           {showLoginForm ? (
             <LoginForm onSubmit={handleEmailPassAuth}>
               <Input
                 required
-                type='email'
-                placeholder={t('loginForm_email')}
+                type="email"
+                placeholder={t("loginForm_email")}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type='password'
-                placeholder={t('loginForm_password')}
+                type="password"
+                placeholder={t("loginForm_password")}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <Link to='/forgotPassword'>
-                <ForgotPassword>{t('forgotPassword')}</ForgotPassword>
+              <Link to="/forgotPassword">
+                <ForgotPassword>{t("forgotPassword")}</ForgotPassword>
               </Link>
-              {<Loader>
-                <EightBitLoader {...loaderProps}/>
-              </Loader>}
-              <FormButton type='submit' disabled={disabled}>{t('login')}</FormButton>
+              {
+                <Loader>
+                  <EightBitLoader {...loaderProps} />
+                </Loader>
+              }
+              <FormButton type="submit" disabled={disabled}>
+                {t("login")}
+              </FormButton>
               <OAuthButton onClick={handleAuth} disabled={disabled}>
-                {t('login_google')}
+                {t("login_google")}
               </OAuthButton>
               <OAuthButton>
                 <a href={schoolAuthLink}>{t("login_42")}</a>
@@ -184,44 +187,42 @@ const Login = (props) => {
             <SignUpForm onSubmit={handleEmailPassSignUp}>
               <Input
                 required
-                type='text'
-                placeholder={t('signUpForm_firstname')}
+                type="text"
+                placeholder={t("signUpForm_firstname")}
                 onChange={(e) => setFirstName(e.target.value)}
                 value={firstName}
               />
               <Input
                 required
-                type='text'
-                placeholder={t('signUpForm_lastname')}
+                type="text"
+                placeholder={t("signUpForm_lastname")}
                 onChange={(e) => setLastName(e.target.value)}
                 value={lastName}
               />
               <Input
                 required
-                type='text'
-                placeholder={t('signUpForm_userName')}
+                type="text"
+                placeholder={t("signUpForm_userName")}
                 onChange={(e) => setUserName(e.target.value)}
                 value={userName}
               />
               <Input
                 required
-                type='email'
-                placeholder={t('signUpForm_email')}
+                type="email"
+                placeholder={t("signUpForm_email")}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
               />
               <Input
                 required
-                type='password'
-                placeholder={t('signUpForm_password')}
+                type="password"
+                placeholder={t("signUpForm_password")}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
               />
-              <FormButton disabled={disabled}>
-                {t('signup')}
-              </FormButton>
+              <FormButton disabled={disabled}>{t("signup")}</FormButton>
               <OAuthButton onClick={handleAuth} disabled={disabled}>
-                {t('signup_google')}
+                {t("signup_google")}
               </OAuthButton>
               <OAuthButton>
                 <a href={schoolAuthLink}>{t("signup_42")}</a>
@@ -248,7 +249,7 @@ const BgImage = styled.div`
   background-position: top;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url('/images/login-background.jpg');
+  background-image: url("/images/login-background.jpg");
   position: absolute;
   top: 0;
   right: 0;
@@ -293,7 +294,7 @@ const LoginOrSignUp = styled.div`
   cursor: pointer;
   height: 30px;
   margin-top: 5px;
-  border-bottom: ${(props) => (props.selected ? '0.01px' : '0px')} solid gray;
+  border-bottom: ${(props) => (props.selected ? "0.01px" : "0px")} solid gray;
   font-weight: bold;
 `;
 
@@ -317,8 +318,7 @@ const Input = styled.input`
   }
 `;
 const LoginForm = styled.form``;
-const SignUpForm = styled.form`
-`;
+const SignUpForm = styled.form``;
 const Loader = styled.div`
   display: flex;
   justify-content: center;

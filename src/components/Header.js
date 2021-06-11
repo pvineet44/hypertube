@@ -11,16 +11,16 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 function Header({ lang, changeLang }) {
-  const [user, setUser] = useState('null');
+  const [user, setUser] = useState("null");
   const userPhoto =
-    'https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo';
-  const userName = 'VP';
+    "https://lh3.googleusercontent.com/ogw/ADea4I7uJL9L2qPYFZW04HUbiOmCrBbLZ3dKAwbCml87=s192-c-mo";
+  const userName = "VP";
   const { t } = useTranslation();
   const history = useHistory();
   const loggedInUser = useSelector((state) => state.loggedInUser);
   const dispatch = useDispatch();
   const signout = () => {
-    console.log('signout');
+    console.log("signout");
     if (loggedInUser) {
       auth
         .signOut()
@@ -29,7 +29,7 @@ function Header({ lang, changeLang }) {
           // history.push("/");
           console.log("LO");
           dispatch(logout());
-          history.push("/");
+          history.push("/login");
         })
         .catch((err) => alert(err.message));
     }
@@ -43,23 +43,24 @@ function Header({ lang, changeLang }) {
       <RightSection>
         <Language>
           {lang}
-          <i className='fa fa-chevron-down'></i>
+          <i className="fa fa-chevron-down"></i>
           <LanguageDropDown>
-            <span onClick={() => changeLang('en')}>EN</span>
-            <span onClick={() => changeLang('fr')}>FR</span>
+            <span onClick={() => changeLang("en")}>EN</span>
+            <span onClick={() => changeLang("fr")}>FR</span>
           </LanguageDropDown>
         </Language>
         {loggedInUser ? (
           <SignOut>
             <Link>
-            <UserImg src={userPhoto} alt={userName} />
+              <UserImg src={userPhoto} alt={userName} />
             </Link>
             <DropDown>
-              <span onClick={signout}>Sign out</span>
+              <span onClick={signout}>{t("signOut")}</span>
+              <span onClick={signout}>{t("myProfile")}</span>
             </DropDown>
           </SignOut>
         ) : (
-          <Link to="/">
+          <Link to="/login">
             <Login>{t("loginSignup")} </Login>
           </Link>
         )}
@@ -131,13 +132,15 @@ const LanguageDropDown = styled.div`
   padding: 10px;
   font-size: 14px;
   letter-spacing: 3px;
-  width: 52px;
+  width: 90px;
   opacity: 0;
   letter-spacing: 1px;
   display: flex;
   flex-direction: column;
   span {
-    margin: 2px;
+    padding: 3px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #362e2ecc;
   }
 `;
 
@@ -152,13 +155,15 @@ const DropDown = styled.div`
   padding: 10px;
   font-size: 14px;
   letter-spacing: 3px;
-  width: 90px;
+  width: 120px;
   opacity: 0;
   letter-spacing: 1px;
   display: flex;
   flex-direction: column;
   span {
-    margin: 2px;
+    padding: 3px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #362e2ecc;
   }
 `;
 
@@ -176,7 +181,7 @@ const Language = styled.div`
   justify-content: center;
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-right: 18px;
+  margin-right: 28px;
 
   &:hover {
     ${LanguageDropDown} {
