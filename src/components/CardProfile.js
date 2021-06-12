@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CardProfile.css'
+import './CardProfile.css';
 
 const ImgUpload = ({ onChange, src }) => (
   <label htmlFor='photo-upload' className='custom-file-upload fas'>
@@ -10,9 +10,9 @@ const ImgUpload = ({ onChange, src }) => (
   </label>
 );
 
-const FirstName = ({ onChange, value }) => (
+const FirstName = ({ onChange, value, t }) => (
   <div className='field'>
-    <label htmlFor='firstname'>First Name:</label>
+    <label htmlFor='firstname'>{t('yourAccount_FirstName')}</label>
     <input
       id='firstname'
       type='text'
@@ -25,53 +25,50 @@ const FirstName = ({ onChange, value }) => (
   </div>
 );
 
-const LastName = ({ onChange, value }) => (
-    <div className='field'>
-      <label htmlFor='firstname'>Last Name:</label>
-      <input
-        id='firstname'
-        type='text'
-        onChange={onChange}
-        maxlength='25'
-        value={value}
-        placeholder='Alexa'
-        required
-      />
-    </div>
-  );
+const LastName = ({ onChange, value, t }) => (
+  <div className='field'>
+    <label htmlFor='firstname'>{t('yourAccount_LastName')}</label>
+    <input
+      id='firstname'
+      type='text'
+      onChange={onChange}
+      maxlength='25'
+      value={value}
+      placeholder='Alexa'
+      required
+    />
+  </div>
+);
 
-  const Email = ({ onChange, value }) => (
-    <div className='field'>
-      <label htmlFor='email'>Email ID:</label>
-      <input
-        id='email'
-        type='text'
-        onChange={onChange}
-        maxlength='25'
-        value={value}
-        placeholder='Alexa'
-        required
-      />
-    </div>
-  );
+const Email = ({ onChange, value, t }) => (
+  <div className='field'>
+    <label htmlFor='email'>{t('yourAccount_Email')}</label>
+    <input
+      id='email'
+      type='text'
+      onChange={onChange}
+      maxlength='25'
+      value={value}
+      placeholder='Alexa'
+      required
+    />
+  </div>
+);
 
-  const Username = ({ onChange, value }) => (
-    <div className='field'>
-      <label htmlFor='username'>Username:</label>
-      <input
-        id='username'
-        type='text'
-        onChange={onChange}
-        maxlength='25'
-        value={value}
-        placeholder='Alexa'
-        required
-      />
-    </div>
-  );
-
-
-  
+const Username = ({ onChange, value, t }) => (
+  <div className='field'>
+    <label htmlFor='username'>{t('yourAccount_Username')}</label>
+    <input
+      id='username'
+      type='text'
+      onChange={onChange}
+      maxlength='25'
+      value={value}
+      placeholder='Alexa'
+      required
+    />
+  </div>
+);
 
 // const Status = ({ onChange, value }) => (
 //   <div className='field'>
@@ -88,37 +85,44 @@ const LastName = ({ onChange, value }) => (
 //   </div>
 // );
 
-const Profile = ({ onSubmit, src, name, status }) => (
+const Profile = ({ onSubmit, src, firstname, lastname, username, email,t  }) => (
   <div className='card'>
     <form onSubmit={onSubmit}>
-      <h1>Profile Card</h1>
+      <h1>{t('yourAccount')}</h1>
       <label className='custom-file-upload fas'>
         <div className='img-wrap'>
           <img for='photo-upload' src={src} />
         </div>
       </label>
-      <div className='name'>{name}</div>
-      <div className='status'>{status}</div>
+      <div className='name'>{firstname}</div>
+      <div className='name'>{lastname}</div>
+      <div className='name'>{username}</div>
+      <div className='name'>{email}</div>
       <button type='submit' className='edit'>
-        Edit Profile{' '}
+        {t('yourAccount_editProfile')}
       </button>
     </form>
   </div>
 );
 
-const Edit = ({ onSubmit, children }) => (
+const Edit = ({ onSubmit, children, t }) => (
   <div className='card'>
     <form onSubmit={onSubmit}>
-      <h1>Your Account</h1>
+      <h1>{t('yourAccount')}</h1>
       {children}
       <button type='submit' className='save'>
-        Save{' '}
+        Save
       </button>
     </form>
   </div>
 );
 
 class CardProfile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { t: props.t };
+  }
+
   state = {
     file: '',
     imagePreviewUrl:
@@ -126,6 +130,7 @@ class CardProfile extends React.Component {
     name: '',
     status: '',
     active: 'edit',
+    t: 0,
   };
 
   photoUpload = (e) => {
@@ -140,17 +145,31 @@ class CardProfile extends React.Component {
     };
     reader.readAsDataURL(file);
   };
-  editName = (e) => {
-    const name = e.target.value;
+  editFirstName = (e) => {
+    const firstname = e.target.value;
     this.setState({
-      name,
+      firstname,
     });
   };
 
-  editStatus = (e) => {
-    const status = e.target.value;
+  editLastName = (e) => {
+    const lastname = e.target.value;
     this.setState({
-      status,
+      lastname,
+    });
+  };
+
+  editEmail = (e) => {
+    const email = e.target.value;
+    this.setState({
+      email,
+    });
+  };
+
+  editUserName = (e) => {
+    const username = e.target.value;
+    this.setState({
+      username,
     });
   };
 
@@ -163,31 +182,32 @@ class CardProfile extends React.Component {
   };
 
   render() {
-    const { imagePreviewUrl, name, status, active } = this.state;
+    const { imagePreviewUrl, firstname, lastname, email, username, active, t } =
+      this.state;
     return (
       <div>
         {active === 'edit' ? (
-          <Edit onSubmit={this.handleSubmit}>
+          <Edit onSubmit={this.handleSubmit} t={t}>
             <ImgUpload onChange={this.photoUpload} src={imagePreviewUrl} />
-            <FirstName onChange={this.editName} value={name} />
-            <LastName onChange={this.editName} value={name} />
-            <Email onChange={this.editName} value={name} />
-            <Username onChange={this.editName} value={name} />
-            
-            
+            <FirstName onChange={this.editFirstName} value={firstname} t={t} />
+            <LastName onChange={this.editLastName} value={lastname} t={t}/>
+            <Email onChange={this.editEmail} value={email} t={t}/>
+            <Username onChange={this.editUserName} value={username} t={t}/>
           </Edit>
         ) : (
           <Profile
             onSubmit={this.handleSubmit}
             src={imagePreviewUrl}
-            name={name}
-            status={status}
+            firstname={firstname}
+            lastname={lastname}
+            email={email}
+            username={username}
+            t={t}
           />
         )}
       </div>
     );
   }
 }
-
 
 export default CardProfile;

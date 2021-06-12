@@ -21,4 +21,10 @@ export const TRANSLATIONS_FR = {
   pleaseWait: "S'il vous plaît, attendez...",
   loginSignup: "Se connecter / S'inscrire",
   myProfile: "Compte",
+  yourAccount: "Votre Compte",
+  yourAccount_FirstName: "Prénom:",
+  yourAccount_LastName: "Nom:",
+  yourAccount_Email: "E-mail:",
+  yourAccount_Username: "Nom d'utilisateur:",
+  yourAccount_editProfile: "Editer le profil"
 };

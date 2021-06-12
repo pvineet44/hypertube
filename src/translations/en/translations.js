@@ -23,4 +23,10 @@ export const TRANSLATIONS_EN = {
   pleaseWait: "Please wait...",
   loginSignup: "LOGIN / SIGNUP",
   myProfile: "Profile",
+  yourAccount: "Your Account",
+  yourAccount_FirstName: "First Name:",
+  yourAccount_LastName: "Last Name:",
+  yourAccount_Email: "E-mail:",
+  yourAccount_Username: "Username:",
+  yourAccount_editProfile: "Edit Profile"
 };
