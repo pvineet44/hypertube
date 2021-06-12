@@ -6,6 +6,7 @@ const { response } = require('express');
 const { db } = require('./firebase');
 //App config
 const app = express();
+app.use(require('body-parser').urlencoded({ extended: false }));
 
 //Middlewares
 app.use(cors({ origin: true }));
@@ -53,6 +54,31 @@ app.get('/user', async (request, response) => {
     console.log('Document data:', doc.data());
   }
   response.status(200).send(doc.data());
+});
+
+app.post('/user', async (request, response) => {
+  var userId = request.query.uid;
+  var email = request.body.email;
+  var firstName = request.body.firstName;
+  var lastName = request.body.lastName;
+  var userName = request.body.userName;
+
+  console.log('req body', request.body);
+
+  var user = await db.collection('users').doc(userId);
+  await db.collection('users')
+    .doc(userId)
+    .update({
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      userName: userName,
+    }).catch((error) => {
+      response.status(404).send({
+        error: 'User not found'
+      })
+    });
+  response.status(200);
 });
 
 // Example endpoint: http://localhost:5001/hypertube-d9f3e/us-central1/api

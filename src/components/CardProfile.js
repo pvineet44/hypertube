@@ -175,6 +175,7 @@ class CardProfile extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log(this.state);
     let activeP = this.state.active === 'edit' ? 'profile' : 'edit';
     this.setState({
       active: activeP,
