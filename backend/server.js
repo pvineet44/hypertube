@@ -12,10 +12,6 @@ const options = {
     passphrase: process.env.PASSPHRASE
 }
 
-const {
-    v4: uuidv4
-} = require('uuid');
-
 const MongoClient = require('mongodb').MongoClient;
 
 const uri = process.env.MONGO_CONNECTION_STRING;
@@ -24,14 +20,12 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true
 });
 
+const routes = require('./src/routes');
+app.use("/", routes)
+
 client.connect(function (err, db) {
     const users = client.db('hypertube').collection('users');
     console.log('users: ', users.find);
-    // app.use(async function (req, res, next) {
-    //     req.db = app.locals.db;
-    //     req.client = app.locals.client;
-    //     next();
-    // });
 });
 
 
@@ -39,11 +33,10 @@ client.connect(function (err, db) {
 const server = https.createServer(options, app);
 app.use(cors());
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({
-//     extended: true
-// }));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 
 server.listen(port);
