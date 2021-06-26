@@ -12,6 +12,7 @@ const options = {
     passphrase: process.env.PASSPHRASE
 }
 
+app.use(cors());
 const MongoClient = require('mongodb').MongoClient;
 
 const uri = process.env.MONGO_CONNECTION_STRING;
@@ -31,7 +32,6 @@ client.connect(function (err, db) {
 
 
 const server = https.createServer(options, app);
-app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
