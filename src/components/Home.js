@@ -10,40 +10,39 @@ function Home(props) {
       console.log(response.data);
       setMovies(response.data)
     });
-  });
+  }, []);
   return (
     <Container>
-      <FilterSection>HOME </FilterSection>
+      <FilterSection>Filter section </FilterSection>
       <MoviesList>
-          {
-            movies.map((movie, index) => (
-              <MovieTab key={index} image = {movie.images.poster}>
-                {
-
-                }
-              </MovieTab>
-            ))
-          }
+        {
+          movies.map((movie, index) => (
+            <MovieTab key={index} image={movie.images.poster}>
+              <MovieMeta>
+                <MovieName>{movie.title}</MovieName>
+                <MovieYear>IMDB: {movie.rating.percentage / 10}⭐</MovieYear>
+                <MovieYear>({movie.year})</MovieYear>
+                <MovieAbout>About: <br></br>{movie.synopsis}</MovieAbout>
+              </MovieMeta>
+            </MovieTab>
+          ))
+        }
       </MoviesList>
     </Container>
   );
 }
 
 const Container = styled.div`
-  // display: flex;
   height: 100vh;
-  // justify-content: center;
-  // align-items: center;
-  color: red;
   margin: 0;
-  // background: white;
 `;
 
 const FilterSection = styled.div`
   height: 50px;
   margin-top: 70px;
   width: 100vw;
-  background: cyan;
+  background: skyblue;
+  color: black;
 `;
 
 const MoviesList = styled.div`
@@ -60,6 +59,31 @@ const MovieTab = styled.div`
   height: 400px;
   border: 1px solid gray;
   border-radius: 5px;
-  background-image: url(${props => props.image});
+  background: url(${props => props.image});
+  background-size: contain;
+  div {
+    visibility:hidden;
+  }
+  &: hover{
+    background: url(${props => props.image}) rgba(0, 0, 0, 0.7);
+    background-size: contain;
+    background-blend-mode: multiply;
+    div {
+      visibility: visible;
+    }
+  }
 `
+
+const MovieMeta = styled.div`
+  color: white;
+  margin-top: 0;
+  margin-left: 5px;
+`
+
+const MovieName = styled.h3``
+
+const MovieYear = styled.div``
+
+const MovieAbout = styled.p``
+
 export default Home;
